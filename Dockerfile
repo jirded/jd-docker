@@ -20,7 +20,8 @@ RUN apt-get install -y \
     libc-client-dev \
     libkrb5-dev \
     uuid-dev \
-    rsyslog
+    rsyslog \
+    libmcrypt-dev
 
 RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ \
         --with-png-dir=/usr/include --with-freetype-dir=/usr/include/ \
