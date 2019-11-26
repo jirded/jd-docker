@@ -190,7 +190,7 @@ RUN gem install scss_lint
 RUN apt-get update && apt-get install -y apt-utils && apt-get install -y curl
 
 # Install additional sofware
-RUN apt-get -y install git mc htop
+RUN apt-get -y install git mc htop vim
 
 # clean for keep up small image
 RUN docker-php-source delete \
@@ -202,7 +202,7 @@ RUN docker-php-source delete \
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN apt-get -y install nodejs
+RUN apt-get -y install nodejs npm
 # Install gulp
 RUN npm install gulp-cli -g
 RUN npm install gulp -g
