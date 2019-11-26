@@ -8,7 +8,6 @@ RUN apt-get -y update
 RUN apt-get install -y \
     git \
     wget \
-    libmcrypt-dev \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
@@ -20,12 +19,10 @@ RUN apt-get install -y \
     libc-client-dev \
     libkrb5-dev \
     uuid-dev \
-    rsyslog \
-    libmcrypt-dev
+    rsyslog
 
 RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ \
         --with-png-dir=/usr/include --with-freetype-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) mcrypt \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install -j$(nproc) soap \
     && docker-php-ext-install -j$(nproc) pdo_mysql \
