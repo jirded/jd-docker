@@ -1,5 +1,5 @@
 # base image for most pilulka.cz web based projects
-FROM php:7.1-apache
+FROM php:7.3-apache
 
 MAINTAINER jiri dedic <jirded@gmail.com>
 
