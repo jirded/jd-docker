@@ -20,7 +20,11 @@ RUN apt-get install -y \
     libkrb5-dev \
     uuid-dev \
     rsyslog \
-    libzip-dev
+    libzip-dev \
+    gcc \
+    libpcre3-dev
+
+ENV PHPIZE_DEPS libpcre3-dev
 
 RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ \
         --with-png-dir=/usr/include --with-freetype-dir=/usr/include/ \
@@ -40,7 +44,7 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ \
 
 # Install PHP extensions
 RUN docker-php-ext-install zip mbstring opcache && \
-    pecl install apcu-5.1.5 && \
+    pecl install apcu-5.1.18 && \
     echo extension=apcu.so > /usr/local/etc/php/conf.d/apcu.ini && \
     pecl install uuid && \
     echo extension=uuid.so > /usr/local/etc/php/conf.d/uuid.ini
@@ -50,13 +54,15 @@ RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install imap
 
 # ZMQ
-RUN apt-get -y install libzmq3-dev \
-    && pecl install zmq-1.1.3 \
-    && docker-php-ext-enable zmq
-
-# RAR
-RUN  pecl install rar \
-    && docker-php-ext-enable rar
+RUN apt-get install --yes git libzmq3-dev
+RUN git clone git://github.com/mkoppanen/php-zmq.git \
+ && cd php-zmq \
+ && phpize && ./configure \
+ && make \
+ && make install \
+ && cd .. \
+ && rm -fr php-zmq \
+RUN docker-php-ext-enable zmq
 
 # Redis
 RUN pecl install -o -f redis \
@@ -194,14 +200,14 @@ RUN apt-get -y install git mc htop vim
 # clean for keep up small image
 RUN docker-php-source delete \
     && rm -rf /tmp/* /var/tmp/*
-#    && apt-get -y autoclean \
-#    && apt-get -y autoremove \
 
 # Update sources list
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN apt-get -y install nodejs npm
+RUN apt-get -y install npm
+RUN npm install npm@latest -g
+RUN apt-get -y install nodejs
 # Install gulp
 RUN npm install gulp-cli -g
 RUN npm install gulp -g
