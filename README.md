@@ -1,5 +1,5 @@
 # docker-php-apache
-Docker repository for PHP 7.1 environment.
+Docker repository for PHP 7.3 environment.
 
 There is posibility to run initial scripts which are located in `/init.d`
 
