@@ -185,6 +185,9 @@ ENV BUNDLE_PATH="$GEM_HOME" \
     BUNDLE_APP_CONFIG="$GEM_HOME"
 # path recommendation: https://github.com/bundler/bundler/pull/6469#issuecomment-383235438
 ENV PATH $GEM_HOME/bin:$BUNDLE_PATH/gems/bin:$PATH
+
+RUN echo "$PATH"
+
 # adjust permissions of a few directories for running "gem install" as an arbitrary user
 RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
 
@@ -218,7 +221,8 @@ RUN npm install eslint -g
 RUN npm install sass-lint -g
 RUN npm install sass-lint-auto-fix -g
 
-COPY docker-php-entrypoint /usr/local/bin/docker-php-entrypoint
+COPY docker-php-entrypoint /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-php-entrypoint
 ENTRYPOINT ["docker-php-entrypoint"]
 
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=AT/ST=Vienna/L=Vienna/O=Security/OU=Development/CN=localhost"
